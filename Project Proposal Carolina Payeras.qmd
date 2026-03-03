@@ -1,0 +1,17 @@
+---
+title: "Project Proposal Carolina Payeras"
+format: html
+editor: visual
+---
+
+I am very interested in development in Colombia, specifically the impacts of the guerilla presence in the rainforests and the rural areas. My proposal for a research question is: Is there an association between increases in poverty in rural areas of Colombia and increases in paramilitary/guerilla activity? I am curious to study this relationship to, via this project, investigate the relationship between rural poverty and violence. Another possible question that could come of this could be: Do increases in investment in rural areas of Colombia decrease guerilla activity?
+
+For data sets, I was thinking of using the following:
+
+Colombian conflict data from HDX [https://data.humdata.org/dataset/colombia-acled-conflict-data](https://data.humdata.org/dataset/colombia-acled-conflict-data?utm_source=chatgpt.com)
+
+Specific variables: Admin1, Admin2, Events, Fatalities
+
+Colombian poverty data from the World Bank: <https://data.humdata.org/dataset/colombia-pobreza-multidimensional-departamental>
+
+Specific variables: Incidencia de Pobreza Multidimensional en IPM Departamentos para ver la pobreza por región de Colombia
