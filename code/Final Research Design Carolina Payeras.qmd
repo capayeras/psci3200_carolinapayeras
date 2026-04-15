@@ -1,0 +1,117 @@
+---
+title: "Final Research Design"
+author: "Carolina Payeras"
+format: html
+editor: visual
+bibliography: references.bib
+---
+
+Introduction:
+
+Hypothesis
+
+Data Discussion:
+
+Research Design:
+
+Main regression model
+
+One empirical extension
+
+Bibliography
+
+The data used for this investigation was gathered by the ACLED and published on the United Nations Office for the Coordination of Humanitarian Affairs' (OCHA) Humanitarian Data Exchange website. Specifically, the data focuses on incidences of violence against civilians per municipality, measured in events and fatalities from these violent incidences, on a weekly frequency. For the purposes of this investigation, we will only look at the number of incidences compositely on a year to year basis, and also by state, also known as *departamentos*, rather than by individual municipality for analysis purposes.
+
+The variables from the data set that are used are Admin1 (departamentos), fatalities, events, and year. Yearly fatalities were calculated by summing weekly fatalities per year, and categorized by the *departamento* in which they took place; the unit of analysis therefore is departamento-year.
+
+```{r, echo= FALSE, message=FALSE}
+library(rio)
+library(dplyr)
+library(tidyverse)
+library(readr)
+library(haven)
+library(purrr)
+library(ggplot2)
+library(readxl)
+
+civilian_violence <- read_xlsx("Copy of colombia_hrp_civilian_targeting_events_and_fatalities_by_month-year_as-of-18mar2026.xlsx")
+
+
+# Only taking the variables I need from the greater data set (don't need postal code or country name, etc.)
+civilian_violence1 <- civilian_violence |>
+  select(Admin1, Admin2, Month, Year, Events, Fatalities)
+
+
+# Now going to re-shape the data to make the unit of analysis departamento-year
+civilian_violence2 <- civilian_violence1 |>
+  group_by(Admin1, Year) |>
+  summarise(
+    total_events = sum(Events, na.rm = TRUE),
+    total_fatalities = sum(Fatalities, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  rename("Departamento" = Admin1)
+
+#Given that there are 32 different departamentos, for the purpose of this investigation I am onyl going to focus on the 8 regions with the highest historical number of guerrilla-based violent incidences
+# Using the %in% function to filter down cases where Departamento equals one of these names
+civilian_violence3 <- civilian_violence2 |>
+  filter(Departamento %in% c("Antioquia", "Arauca", "Cauca", "Norte de Santander", "Valle de Cauca", "Narino", "Bolivar", "Putumayo"))
+
+civilian_violence3 <- civilian_violence3 |>
+  mutate(Year = as.numeric(Year))
+
+#Going to make two different sets of data for easier analysis, one for events and one for fatalities, this way the visualization will be clearer 
+violence_events <- civilian_violence3 |>
+  select(Departamento, Year, total_events)
+
+#Doing the same thing here but focusing on fatalities
+violence_fatalities <- civilian_violence3 |>
+  select(Departamento, Year, total_fatalities)
+
+## First going to visualize the the patterns of the number of violence events per region per year on a timescale
+# Want t use the geom_vline function to add a vertical line that will mark when Total Peace was implemented
+
+ggplot(violence_events, aes(x = Year, y = total_events, color = Departamento, group = Departamento)) +
+  geom_line(linewidth = 1) +
+  geom_vline(xintercept = 2022, linetype = "dashed", color = "black") +
+  labs(
+    title = "Figure 1. Events over time by region",
+    subtitle = "Total Peace implemented in 2022",
+    x = "Year",
+    y = "Number of events"
+  ) +
+  theme_minimal()
+
+```
+
+```{r, echo= FALSE, message=FALSE}
+## I will now make the same plot for trends in fatalities
+ggplot(violence_fatalities, aes(x = Year, y = total_fatalities, color = Departamento, group = Departamento)) +
+  geom_line(linewidth = 1) +
+  geom_vline(xintercept = 2022, linetype = "dashed", color = "black") +
+  labs(
+    title = "Figure 2. Fatalities over time by region",
+    subtitle = "Total Peace implemented in 2022",
+    x = "Year",
+    y = "Number of fatalities"
+  ) +
+  theme_minimal()
+
+```
+
+These two plots look quite similar so I eventually may just choose to use the events one because it generally encompasses slightly more instances of violence, and I am looking to get the most accurate numbers possible.
+
+The regression model for this analysis models the relationship between time post-Total Peace, or post-2022, and the number of violent incidents, which could be events or fatalities. Assuming a linear model, we would use the following formula:
+
+$$
+Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \epsilon_{dt}
+$$
+
+The variables in the model are as follows:
+
+-   Violence = Number of violent events or fatalities
+-   t = time after Total Peace implementation in 2022
+-   d = departamento
+-   beta0 = intercept of the model
+-   beta1 = coefficient of change in violence for every year post-2022
+-   edt = this variable stands in for fixed-effects from each region that need to be controlled for, such as density, poverty, or region-specific shocks
