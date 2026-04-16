@@ -1,0 +1,159 @@
+---
+title: "Final Research Design"
+author: "Carolina Payeras"
+format: html
+editor: visual
+bibliography: references.bibb.bib
+---
+
+# Introduction
+
+For over 50 years, Colombia's government has been engaged in a civil war with the guerrilla fighters known as the FARC (Revolutionary Armed Forces of Colombia), which has resulted in violence and fear around the country, as well as notorious drug-trafficking. In 2016, President Juan Manuel Santos signed a historic peace treaty with the FARC in the hopes of ending the conflict, with the FARC agreeing to disarm and transition into a legitimate political party and bringing about hope for a new Colombia. In 2018, however, successive President Iván Duque, who was a critic of the peace treaty, promised to 'modify' the treaty to be more punitive of former guerrillas, claiming the 2016 Treaty was too lenient. This change in position of the Colombian government only heightened tensions with the FARC, and the peace deal began to crumble as guerrilla forces resumed armed violence, and consequently the new branch of the FARC-EP gained momentum [@gutierrez_d_toward_2020].
+
+The current Colombian government under President Gustavo Petro announced their policy of “Total Peace” in 2022, which proposed easing hostility towards the guerrillas in order to de-escalate violence and encourage negotiations and dialogue. However, after four years of the Petro administration, the positive effects of Total Peace and the enormous undertaking it has been for the government have been under scrutiny by organizations such as the Washington Office on Latin America, who claim that the size and scope of the project has overwhelmed the government and undermined the policy's success [@totalp2025].
+
+The challenges associated with re-integration of a society post-war are the subject of numerous academic works, and this investigation aims to build off of existing discourse. In their comprehensive article “Civil War”, Blattmann and Miguel explain that post-intrastate conflict, “victors and vanquished (and victims) are condemned to coexist in the same society, potentially exacerbating political and social divisions.” [@blattman_civil_2010] This could pose a challenge to Total Peace’s panacea of a solution in which ex-FARc fighters will be welcomed back into society, as not only could there still be emotional resistance towards cooperation with the state, social fear of FARC fighters and hostility towards them will not go away immediately with Petro’s policy.
+
+Furthermore, an article touching on this exact point of interest was recently authored by Julián Arévalo, who positions Colombia’s current negotiations within the wider context of how peace negotiations after violence should be studied, emphasizing that elements within negotiations, rather than just the act of negotiating itself, are pivotal to its success [@arevalo_complex_2025]. Although this investigation will not dive into the details of the plan itself, the language and manner in which Petro is approaching peace could also be integral to its success in decreasing the intensity of violence. Finally, measuring Total Peace’s success first via intensity of conflict rather than conflict gives us a chance to engage with smaller levels of success within a complex peace process rather than a crude view of violence trends in their entirety. Building off of work by Bara [et.al](http://et.al/), who propose investigating various forms of post-war violence discretely to gain a clearer picture of a society re-integrating their previous adversaries [@bara_civil_2021].
+
+## Hypothesis
+
+The question this paper aims to investigate is whether Gustavo Petro's Total Peace policy led to a decrease in curtailing civilian-targeted fatalities in states with histories of FARC activity. This paper hypothesizes that civilian-targeted fatalities will have decreased after the implementation of Total Peace. For this investigation, fatalities are used as a proxy for the intensity of violence rather than simply the occurrence of violence. I expect to see this relationship based on the policy being a large-scale government effort that aims to reduce hostility from the government towards the guerrillas, and the mechanism through which the policy would reduce violence towards civilians would be fewer state-FARC confrontations and less of a need to enforce dominance through killings. If the FARC responded violently when they felt their voices in government were being silenced and demonized, then maybe this effort would ease their concerns of ostracization and political disenfranchisement. This is not to say that it will overall civilian-targeted violence, which has actively been contested by scholars and institutions such as the ACLED (2024), but specifically it could likely reduce violent events and fatalities.
+
+# Data Discussion:
+
+The data used for this investigation was gathered by the ACLED and published on the United Nations Office for the Coordination of Humanitarian Affairs' (OCHA) Humanitarian Data Exchange website. Specifically, the data focuses on incidences of violence against civilians per municipality, measured in events and fatalities from these violent incidences, on a weekly frequency. The ACLED defines civilian For the purposes of this investigation, we will only look at the number of incidences compositely on a year to year basis, and also by state, also known as *departamentos*, rather than by individual municipality for analysis purposes.
+
+This investigation will only focus on the top eight departamentos in terms FARC activity, and therefore FARC violence \[insert citation\]. There are 32 departamentos in total, so the top eight will make up the top 25%.
+
+The variables from the data set that are used are Admin1 (departamentos), fatalities, events, and year. Yearly fatalities were calculated by summing weekly fatalities per year, and categorized by the *departamento* in which they took place; the unit of analysis therefore is departamento-year.
+
+The mean and the range of the variables over time on aggregate for the eight departamentos we are focusing on are below.
+
+```{r, echo= FALSE, message=FALSE}
+library(rio)
+library(dplyr)
+library(tidyverse)
+library(readr)
+library(haven)
+library(purrr)
+library(ggplot2)
+library(readxl)
+
+civilian_violence <- read_xlsx("input/civilian_raw.xlsx")
+coca_production <- read_xlsx("input/coca_production_raw.xlsx")
+
+
+# Only taking the variables I need from the greater data set (don't need postal code or country name, etc.)
+civilian_violence1 <- civilian_violence |>
+  select(Admin1, Admin2, Month, Year, Events, Fatalities)
+
+
+# Now going to re-shape the data to make the unit of analysis departamento-year
+civilian_violence2 <- civilian_violence1 |>
+  group_by(Admin1, Year) |>
+  summarise(
+    total_events = sum(Events, na.rm = TRUE),
+    total_fatalities = sum(Fatalities, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  rename("Departamento" = Admin1) |>
+  filter(Year != 2026)
+
+#Given that there are 32 different departamentos, for the purpose of this investigation I am onyl going to focus on the 8 regions with the highest historical number of guerrilla-based violent incidences
+# Using the %in% function to filter down cases where Departamento equals one of these names
+civilian_violence3 <- civilian_violence2 |>
+  filter(Departamento %in% c("Antioquia", "Arauca", "Cauca", "Norte de Santander", "Valle de Cauca", "Narino", "Bolivar", "Putumayo"))
+
+civilian_violence3 <- civilian_violence3 |>
+  mutate(Year = as.numeric(Year))
+
+# Selecting only the key variables that I want for measuring fatalities over time per departamento
+violence_fatalities <- civilian_violence3 |>
+  select(Departamento, Year, total_fatalities)
+
+mean_fatalities_per_year <- violence_fatalities |>
+  group_by(Year) |>
+  summarise(
+    mean_fatalities = mean(total_fatalities, na.rm = TRUE),
+    min_fatalities = min(total_fatalities, na.rm = TRUE),
+    max_fatalities = max(total_fatalities, na.rm = TRUE))
+
+library(knitr)
+
+kable(mean_fatalities_per_year,
+      col.names = c("Year", "Mean", "Min", "Max"),
+      digits = 1,
+      caption = "Mean fatalities per year across all regions")
+
+```
+
+```{r, echo= FALSE, message=FALSE}
+
+## Going to visualize the the patterns of the number of civilian-targeted fatalities per region per year on a timescale
+# Want t use the geom_vline function to add a vertical line that will mark when Total Peace was implemented
+
+#| label: Figure 1
+#| fig-cap: "Civilian-target fatalities by departamento from 2018 to 2025. President Petro's Total Peace policy was put into law in August of 2022, therefore the vertical line helps mark the trends in fatalities before and after the plan.
+
+fatalities_plot <- ggplot(violence_fatalities, aes(x = Year, y = total_fatalities, color = Departamento, group = Departamento)) +
+  geom_line(linewidth = 1) +
+  geom_vline(xintercept = 2022, linetype = "dashed", color = "black") +
+  labs(
+    title = "Figure 1. Fatalities over time by region",
+    x = "Year",
+    y = "Number of fatalities"
+  ) +
+  theme_minimal()
+
+
+print(fatalities_plot)
+```
+
+# Research Design
+
+## Main regression model
+
+The regression model for this analysis models the relationship between time post-Total Peace, or post-2022, and the number of civilian-targeted fatilities. Assuming a linear model, we would use the following formula:
+
+$$
+Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \alpha_d + \epsilon_{dt}
+$$
+
+The variables in the model are as follows:
+
+-   Violence = Number of violent events or fatalities
+-   t = time after Total Peace implementation in 2022 (in years)
+-   d = departamento
+-   Beta (0) = intercept of the model
+-   beta1Beta (1) = coefficient of change in violence for every year post-2022
+-   alpha (d) = this variable controls for stable differences across departamentos such as population density, poverty, and regional economic output
+-   Edt = this variable stands in for time-dependent effects from each region that need to be controlled for, such as density, poverty, or region-specific shocks
+
+Within this model, we want to focus on the value of Beta (1); should it be negative, this would confirm the hypothesis that the Total Peace Plan did decrease civilian-targeted fatalities in the chosen regions, even controlling for stable and time-dependent variation among the areas.
+
+## One empirical extension
+
+One way that we can further validate that Total Peace is in fact working to decrease civilian-targeted fatalities is by seeing if coca production increased since Petro took office. In theory, less government oversight and patrol of FARC-controlled areas would mean higher coca production and fewer encounters with the state. The data used comes from the United Nations Office on Drugs and Crime.
+
+```{r, echo=FALSE, message=FALSE}
+
+coca_production_long <- coca_production |>
+  pivot_longer(
+    cols = starts_with("20"),   # selects all year columns
+    names_to = "year",
+    values_to = "hectares") |>
+  mutate(year = as.integer(year)) |>
+  select(year, hectares)
+
+coca_production_growth <- plot(coca_production_long$year, coca_production_long$hectares,
+     type = "l",
+     main = "Figure 2.Number of Hectares of Coca Cultivation in Colombia",
+     xlab = "Year",
+     ylab = "Hectares")
+
+print(coca_production_growth)
+
+```
+
+As seen in Figure 2, coca production does indeed continue to increase when the Total Peace plan is put into place, which shows that the mechanism of reducing fatalities via backing off of FARC territory and activity could be a viable causal argument.

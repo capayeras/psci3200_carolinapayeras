@@ -1,0 +1,110 @@
+---
+title: "Research Design Final Project"
+author: "Carolina Payeras"
+format: html
+editor: visual
+---
+
+Research Background:
+
+For over 50 years, Colombia's government has been engaged in a civil war with the guerrilla fighters known as the FARC (Revolutionary Armed Forces of Colombia), which has resulted in violence and fear around the country, as well as notorious drug-trafficking. In 2016, President Juan Manuel Santos signed a historic peace treaty with the FARC in the hopes of ending the conflict, with the FARC agreeing to disarm and transition into a legitimate political party and bringing about hope for a new Colombia. In 2018, however, successive President Iván Duque, who was a critic of the peace treaty, promised to 'modify' the treaty to be more punitive of former guerrillas, claiming the 2016 Treaty was too lenient. This change in position of the Colombian government only heightened tensions with the FARC, and the peace deal began to crumble as guerrilla forces resumed armed violence, and consequently the new branch of the FARC-EP gained momentum (Gutierrez D., 2020).
+
+The current Colombian government under President Gustavo Petro announced their policy of 'Total Peace' in 2022, which proposed easing hostility towards the guerrillas in order to de-escalate violence and encourage negotiations and dialogue. The idea was that decreasing tensions and promoting communication would facilitate and environment that could bring both parties to an agreement. However, after four years of the Petro administration, the positive effects of Total Peace and the enormous undertaking it has been for the government have been under scrutiny by organizations such as the Washington Office on Latin America, who claim that the size and scope of the project has overwhelmed the government and undermined the policy's success (2025).
+
+The question this paper aims to investigate is whether Gustavo Petro's Total Peace policy was successful in curtailing guerrilla-based violence in states with histories of FARC activity. This paper hypothesizes that in terms of total incidences of guerilla-based violence, these will have decreased after the implementation of Total Peace. I expect to see this relationship based on the policy being a large-scale government effort that aims to reduce hostility from the government towards the guerrillas, and in theory this will lead to fewer confrontations between armed parties, and potentially fewer violent incidences. If the FARC responded violently when they felt their voices in government where being silenced and demonized, then maybe this effort would ease their concerns of ostricization and political disenfrahnchisement. This is not to say that it will overall decrease guerrilla activity, which has actively been contested by scholars and institutions such as the ACLED (2024), but specifically it could likely reduce guerrilla violence.
+
+The data used for this investigation was gathered by the ACLED and published on the United Nations Office for the Coordination of Humanitarian Affairs' (OCHA) Humanitarian Data Exchange website. Specifically, the data focuses on incidences of violence against civilians per municipality, measured in events and fatalities from these violent incidences, on a weekly frequency. For the purposes of this investigation, we will only look at the number of incidences compositely on a year to year basis, and also by state, also known as *departamentos*, rather than by individual municipality for analysis purposes.
+
+The variables from the data set that are used are Admin1 (departamentos), fatalities, events, and year. Yearly fatalities were calculated by summing weekly fatalities per year, and categorized by the *departamento* in which they took place; the unit of analysis therefore is departamento-year.
+
+```{r, echo= FALSE, message=FALSE}
+library(rio)
+library(dplyr)
+library(tidyverse)
+library(readr)
+library(haven)
+library(purrr)
+library(ggplot2)
+library(readxl)
+
+civilian_violence <- read_xlsx("input/civilian_raw.xlsx")
+
+
+# Only taking the variables I need from the greater data set (don't need postal code or country name, etc.)
+civilian_violence1 <- civilian_violence |>
+  select(Admin1, Admin2, Month, Year, Events, Fatalities)
+
+
+# Now going to re-shape the data to make the unit of analysis departamento-year
+civilian_violence2 <- civilian_violence1 |>
+  group_by(Admin1, Year) |>
+  summarise(
+    total_events = sum(Events, na.rm = TRUE),
+    total_fatalities = sum(Fatalities, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  rename("Departamento" = Admin1)
+
+#Given that there are 32 different departamentos, for the purpose of this investigation I am onyl going to focus on the 8 regions with the highest historical number of guerrilla-based violent incidences
+# Using the %in% function to filter down cases where Departamento equals one of these names
+civilian_violence3 <- civilian_violence2 |>
+  filter(Departamento %in% c("Antioquia", "Arauca", "Cauca", "Norte de Santander", "Valle de Cauca", "Narino", "Bolivar", "Putumayo"))
+
+civilian_violence3 <- civilian_violence3 |>
+  mutate(Year = as.numeric(Year))
+
+#Going to make two different sets of data for easier analysis, one for events and one for fatalities, this way the visualization will be clearer 
+violence_events <- civilian_violence3 |>
+  select(Departamento, Year, total_events)
+
+#Doing the same thing here but focusing on fatalities
+violence_fatalities <- civilian_violence3 |>
+  select(Departamento, Year, total_fatalities)
+
+## First going to visualize the the patterns of the number of violence events per region per year on a timescale
+# Want t use the geom_vline function to add a vertical line that will mark when Total Peace was implemented
+
+ggplot(violence_events, aes(x = Year, y = total_events, color = Departamento, group = Departamento)) +
+  geom_line(linewidth = 1) +
+  geom_vline(xintercept = 2022, linetype = "dashed", color = "black") +
+  labs(
+    title = "Figure 1. Events over time by region",
+    subtitle = "Total Peace implemented in 2022",
+    x = "Year",
+    y = "Number of events"
+  ) +
+  theme_minimal()
+
+```
+
+```{r, echo= FALSE, message=FALSE}
+## I will now make the same plot for trends in fatalities
+ggplot(violence_fatalities, aes(x = Year, y = total_fatalities, color = Departamento, group = Departamento)) +
+  geom_line(linewidth = 1) +
+  geom_vline(xintercept = 2022, linetype = "dashed", color = "black") +
+  labs(
+    title = "Figure 2. Fatalities over time by region",
+    subtitle = "Total Peace implemented in 2022",
+    x = "Year",
+    y = "Number of fatalities"
+  ) +
+  theme_minimal()
+
+```
+
+These two plots look quite similar so I eventually may just choose to use the events one because it generally encompasses slightly more instances of violence, and I am looking to get the most accurate numbers possible.
+
+The regression model for this analysis models the relationship between time post-Total Peace, or post-2022, and the number of violent incidents, which could be events or fatalities. Assuming a linear model, we would use the following formula:
+
+$$
+Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \epsilon_{dt}
+$$
+
+The variables in the model are as follows:
+
+-   Violence = Number of violent events or fatalities
+-   t = time after Total Peace implementation in 2022
+-   d = departamento
+-   beta0 = intercept of the model
+-   beta1 = coefficient of change in violence for every year post-2022
+-   edt = this variable stands in for fixed-effects from each region that need to be controlled for, such as density, poverty, or region-specific shocks
