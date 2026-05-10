@@ -8,5 +8,5 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: project_proposal_carolina.qmd
+      - href: project_final_version_carolina_payeras.qmd
         text: Research Question
