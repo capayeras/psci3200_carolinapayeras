@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,6 +10,9 @@
 
 <title>Final Research Design – Carolina Payeras - PSCI 3200</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -25,7 +28,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -57,10 +59,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a14e3238c51140e99ccc48519b6ed9ce.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-45431c2918bd31147ddb3fa7038bb99f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -90,7 +92,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -103,7 +105,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -143,7 +145,7 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./project_proposal_carolina.qmd"> 
+    <a class="nav-link" href="./project_final_version_carolina_payeras.html"> 
 <span class="menu-text">Research Question</span></a>
   </li>  
 </ul>
@@ -189,9 +191,9 @@ window.Quarto = {
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>For over 50 years, Colombia’s government has been engaged in a civil war with the guerrilla fighters known as the FARC (Revolutionary Armed Forces of Colombia), which has resulted in violence and fear around the country, as well as notorious drug-trafficking. In 2016, President Juan Manuel Santos signed a historic peace treaty with the FARC in the hopes of ending the conflict, with the FARC agreeing to disarm and transition into a legitimate political party and bringing about hope for a new Colombia. In 2018, however, successive President Iván Duque, who was a critic of the peace treaty, promised to ‘modify’ the treaty to be more punitive of former guerrillas, claiming the 2016 Treaty was too lenient. This change in position of the Colombian government only heightened tensions with the FARC, and the peace deal began to crumble as guerrilla forces resumed armed violence, and consequently the new branch of the FARC-EP gained momentum <span class="citation" data-cites="gutierrez_d_toward_2020">(<a href="#ref-gutierrez_d_toward_2020" role="doc-biblioref">Gutiérrez D. 2020</a>)</span>.</p>
-<p>The current Colombian government under President Gustavo Petro announced their policy of “Total Peace” in 2022, which proposed easing hostility towards the guerrillas in order to de-escalate violence and encourage negotiations and dialogue. However, after four years of the Petro administration, the positive effects of Total Peace and the enormous undertaking it has been for the government have been under scrutiny by organizations such as the Washington Office on Latin America, who claim that the size and scope of the project has overwhelmed the government and undermined the policy’s success <span class="citation" data-cites="totalp2025">(<a href="#ref-totalp2025" role="doc-biblioref"><span>“<span>‘</span>Total Peace<span>’</span> Paradox in Colombia: Petro’s Policy Reduced Violence, but Armed Groups Grew Stronger | ACLED”</span> 2025</a>)</span>.</p>
+<p>The current Colombian government under President Gustavo Petro announced their policy of “Total Peace” in 2022, which proposed easing hostility towards the guerrillas in order to de-escalate violence and encourage negotiations and dialogue. However, after four years of the Petro administration, the positive effects of Total Peace and the enormous undertaking it has been for the government have been under scrutiny by organizations such as the Washington Office on Latin America, who claim that the size and scope of the project has overwhelmed the government and undermined the policy’s success <span class="citation" data-cites="totalp2025">(<a href="#ref-totalp2025" role="doc-biblioref"><strong>totalp2025?</strong></a>)</span>.</p>
 <p>The challenges associated with re-integration of a society post-war are the subject of numerous academic works, and this investigation aims to build off of existing discourse. In their comprehensive article “Civil War”, Blattmann and Miguel explain that post-intrastate conflict, “victors and vanquished (and victims) are condemned to coexist in the same society, potentially exacerbating political and social divisions.” <span class="citation" data-cites="blattman_civil_2010">(<a href="#ref-blattman_civil_2010" role="doc-biblioref">Blattman and Miguel 2010</a>)</span> This could pose a challenge to Total Peace’s panacea of a solution in which ex-FARc fighters will be welcomed back into society, as not only could there still be emotional resistance towards cooperation with the state, social fear of FARC fighters and hostility towards them will not go away immediately with Petro’s policy.</p>
-<p>Furthermore, an article touching on this exact point of interest was recently authored by Julián Arévalo, who positions Colombia’s current negotiations within the wider context of how peace negotiations after violence should be studied, emphasizing that elements within negotiations, rather than just the act of negotiating itself, are pivotal to its success <span class="citation" data-cites="arevalo_complex_2025">(<a href="#ref-arevalo_complex_2025" role="doc-biblioref">Arévalo 2025</a>)</span>. Although this investigation will not dive into the details of the plan itself, the language and manner in which Petro is approaching peace could also be integral to its success in decreasing the intensity of violence. Finally, measuring Total Peace’s success first via intensity of conflict rather than conflict gives us a chance to engage with smaller levels of success within a complex peace process rather than a crude view of violence trends in their entirety. Building off of work by Bara <a href="http://et.al/">et.al</a>, who propose investigating various forms of post-war violence discretely to gain a clearer picture of a society re-integrating their previous adversaries <span class="citation" data-cites="bara_civil_2021">(<a href="#ref-bara_civil_2021" role="doc-biblioref">Bara, Deglow, and Baalen 2021</a>)</span>.</p>
+<p>Furthermore, an article touching on this exact point of interest was recently authored by Julián Arévalo, who positions Colombia’s current negotiations within the wider context of how peace negotiations after violence should be studied, emphasizing that elements within negotiations, rather than just the act of negotiating itself, are pivotal to its success <span class="citation" data-cites="arevalo_complex_2025">(<a href="#ref-arevalo_complex_2025" role="doc-biblioref">Arévalo 2025</a>)</span>. Although this investigation will not dive into the details of the plan itself, the language and manner in which Petro is approaching peace could also be integral to its success in decreasing the intensity of violence. Finally, measuring Total Peace’s success first via intensity of conflict rather than conflict gives us a chance to engage with smaller levels of success within a complex peace process rather than a crude view of violence trends in their entirety. Building off of work by Bara <a href="http://et.al/">et.al</a>, who propose investigating various forms of post-war violence discretely to gain a clearer picture of a society re-integrating their previous adversaries <span class="citation" data-cites="bara_civil_2021">(<a href="#ref-bara_civil_2021" role="doc-biblioref">Bara et al. 2021</a>)</span>.</p>
 <section id="hypothesis" class="level2">
 <h2 class="anchored" data-anchor-id="hypothesis">Hypothesis</h2>
 <p>The question this paper aims to investigate is whether Gustavo Petro’s Total Peace policy led to a decrease in curtailing civilian-targeted fatalities in states with histories of FARC activity. This paper hypothesizes that civilian-targeted fatalities will have decreased after the implementation of Total Peace. For this investigation, fatalities are used as a proxy for the intensity of violence rather than simply the occurrence of violence. I expect to see this relationship based on the policy being a large-scale government effort that aims to reduce hostility from the government towards the guerrillas, and the mechanism through which the policy would reduce violence towards civilians would be fewer state-FARC confrontations and less of a need to enforce dominance through killings. If the FARC responded violently when they felt their voices in government were being silenced and demonized, then maybe this effort would ease their concerns of ostracization and political disenfranchisement. This is not to say that it will overall civilian-targeted violence, which has actively been contested by scholars and institutions such as the ACLED (2024), but specifically it could likely reduce violent events and fatalities.</p>
@@ -283,9 +285,7 @@ window.Quarto = {
 <section id="main-regression-model" class="level2">
 <h2 class="anchored" data-anchor-id="main-regression-model">Main regression model</h2>
 <p>The regression model for this analysis models the relationship between time post-Total Peace, or post-2022, and the number of civilian-targeted fatilities. Assuming a linear model, we would use the following formula:</p>
-<p><span class="math display">\[
-Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \alpha_d + \epsilon_{dt}
-\]</span></p>
+<p><span class="math display">\[Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \alpha_d + \epsilon_{dt}\]</span></p>
 <p>The variables in the model are as follows:</p>
 <ul>
 <li>Violence = Number of violent events or fatalities</li>
@@ -320,7 +320,7 @@ Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \alpha_d + \epsilon_{dt}
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-arevalo_complex_2025" class="csl-entry" role="listitem">
 Arévalo, Julián. 2025. <span>“Complex Dynamics in Peace Negotiations: Insiders’ Views on the <span>Colombian</span> Experience.”</span> <em>International Affairs</em> 101 (2): 523–41. <a href="https://doi.org/10.1093/ia/iiae318">https://doi.org/10.1093/ia/iiae318</a>.
 </div>
@@ -332,9 +332,6 @@ Blattman, Christopher, and Edward Miguel. 2010. <span>“Civil <span>War</span>.
 </div>
 <div id="ref-gutierrez_d_toward_2020" class="csl-entry" role="listitem">
 Gutiérrez D., José Antonio. 2020. <span>“Toward a <span>New</span> <span>Phase</span> of <span>Guerrilla</span> <span>Warfare</span> in <span>Colombia</span>?: <span>The</span> <span>Reconstitution</span> of the <span>FARC</span>-<span>EP</span> in <span>Perspective</span>.”</span> <em>Latin American Perspectives</em> 47 (5): 227–44. <a href="https://www.jstor.org/stable/48585584">https://www.jstor.org/stable/48585584</a>.
-</div>
-<div id="ref-totalp2025" class="csl-entry" role="listitem">
-<span>“<span>‘</span>Total Peace<span>’</span> Paradox in Colombia: Petro’s Policy Reduced Violence, but Armed Groups Grew Stronger | ACLED.”</span> 2025. <a href="https://acleddata.com/report/total-peace-paradox-colombia-petros-policy-reduced-violence-armed-groups-grew-stronger">https://acleddata.com/report/total-peace-paradox-colombia-petros-policy-reduced-violence-armed-groups-grew-stronger</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -388,13 +385,14 @@ Gutiérrez D., José Antonio. 2020. <span>“Toward a <span>New</span> <span>Pha
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

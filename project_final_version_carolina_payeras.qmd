@@ -3,11 +3,11 @@ title: "Project Final Version"
 author: "Carolina Payeras"
 format: html
 editor: visual
-bibliography: references
+bibliography: references.bib
 ---
 
-```{r}
-knitr::opts_chunk$set(message=FALSE, warning=FALSE, echo=FALSE).
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, echo=FALSE)
 
 ```
 
@@ -158,7 +158,9 @@ print(fatalities_plot)
 
 Figure 1 demonstrates that at the inital implementation of Total Peace by 2023, most regions had seen a decrease in the number of fatalities that year, even as the restrictions from the COVID-19 pandemic relaxed and more people were able to leave isolation. However, there seems to be increases from 2024 in certain regions such as Bolivar, Antioquia, and Norte de Santander started to increase in fatalities. This implies that Total Peace potentially only had short-term effects and is struggling to maintain lower levels of fatalities past 2024, which could indicate something amiss with the terms of negotiation that guerrilla groups may not agree with, or that decreased government oversight does in fact ultimately lead to more violence.
 
-```{r}
+### Table 1. Effect of Total Peace on Civilian-Targeted Fatalities
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 #This is the code for running the regression model that I specified above
 regression <- violence_fatalities |>
   mutate(
