@@ -167,7 +167,7 @@ regression <- violence_fatalities |>
     post_2022 = if_else(Year > 2022, 1, 0))
 
 
-#Here I am using the feols from the fixest package to include fixed effects estimations for the ordinary least squares regression that I am running
+#Here I am using the feols from the fixest package to include fixed effects estimations for the ordinary least squares regression that I am running, and the cluster means that it is clustering the standard errors by departamento for the group of years it contains
 model_1 <- feols(
   total_fatalities ~ post_2022 | Departamento,
   cluster = ~Departamento,
@@ -176,7 +176,7 @@ model_1 <- feols(
 
 modelsummary(model_1)
 
-
+# I am using this technique to make my output look a bit cleaner so that there are not unnecessary rows, and to highlight the p-value and the estimation from my model
 modelsummary(
   model_1,
   stars = TRUE,
