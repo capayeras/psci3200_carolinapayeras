@@ -3,7 +3,7 @@ title: "Final Research Design"
 author: "Carolina Payeras"
 format: html
 editor: visual
-bibliography: references.bibb.bib
+bibliography: references.bib
 ---
 
 # Introduction
@@ -116,19 +116,17 @@ print(fatalities_plot)
 
 The regression model for this analysis models the relationship between time post-Total Peace, or post-2022, and the number of civilian-targeted fatilities. Assuming a linear model, we would use the following formula:
 
-$$
-Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \alpha_d + \epsilon_{dt}
-$$
+$$Violence_{dt} = \beta_0 + \beta_1 Post2022_t + \alpha_d + \epsilon_{dt}$$
 
 The variables in the model are as follows:
 
--   Violence = Number of violent events or fatalities
--   t = time after Total Peace implementation in 2022 (in years)
--   d = departamento
--   Beta (0) = intercept of the model
--   beta1Beta (1) = coefficient of change in violence for every year post-2022
--   alpha (d) = this variable controls for stable differences across departamentos such as population density, poverty, and regional economic output
--   Edt = this variable stands in for time-dependent effects from each region that need to be controlled for, such as density, poverty, or region-specific shocks
+- Violence = Number of violent events or fatalities
+- t = time after Total Peace implementation in 2022 (in years)
+- d = departamento
+- Beta (0) = intercept of the model
+- beta1Beta (1) = coefficient of change in violence for every year post-2022
+- alpha (d) = this variable controls for stable differences across departamentos such as population density, poverty, and regional economic output
+- Edt = this variable stands in for time-dependent effects from each region that need to be controlled for, such as density, poverty, or region-specific shocks
 
 Within this model, we want to focus on the value of Beta (1); should it be negative, this would confirm the hypothesis that the Total Peace Plan did decrease civilian-targeted fatalities in the chosen regions, even controlling for stable and time-dependent variation among the areas.
 
